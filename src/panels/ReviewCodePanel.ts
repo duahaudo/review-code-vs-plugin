@@ -23,7 +23,7 @@ export class ReviewCodePanel {
    * @param panel A reference to the webview panel
    * @param extensionUri The URI of the directory containing the extension
    */
-  private constructor(panel: WebviewPanel, extensionUri: Uri, codeBlock: string) {
+  private constructor(panel: WebviewPanel, extensionUri: Uri) {
     this._panel = panel;
 
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
@@ -31,10 +31,16 @@ export class ReviewCodePanel {
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
     // Set the HTML content for the webview panel
-    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, codeBlock);
+    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
 
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
+  }
+
+  public static postMessage(message: any) {
+    if (ReviewCodePanel.currentPanel) {
+      ReviewCodePanel.currentPanel._panel.webview.postMessage(message);
+    }
   }
 
   /**
@@ -43,11 +49,10 @@ export class ReviewCodePanel {
    *
    * @param extensionUri The URI of the directory containing the extension.
    */
-  public static render(extensionUri: Uri, codeBlock: string) {
+  public static render(extensionUri: Uri) {
     if (ReviewCodePanel.currentPanel) {
       // If the webview panel already exists reveal it
       ReviewCodePanel.currentPanel._panel.reveal(ViewColumn.One);
-      ReviewCodePanel.currentPanel._panel.webview.postMessage({ codeBlock });
     } else {
       // If a webview panel does not already exist create and show a new one
       const panel = window.createWebviewPanel(
@@ -66,7 +71,7 @@ export class ReviewCodePanel {
         }
       );
 
-      ReviewCodePanel.currentPanel = new ReviewCodePanel(panel, extensionUri, codeBlock);
+      ReviewCodePanel.currentPanel = new ReviewCodePanel(panel, extensionUri);
     }
   }
 
@@ -99,7 +104,7 @@ export class ReviewCodePanel {
    * @returns A template string literal containing the HTML that should be
    * rendered within the webview panel
    */
-  private _getWebviewContent(webview: Webview, extensionUri: Uri, codeBlock: string) {
+  private _getWebviewContent(webview: Webview, extensionUri: Uri) {
     // The CSS file from the React build output
     const stylesUri = getUri(webview, extensionUri, [
       "webview-ui",
@@ -118,8 +123,6 @@ export class ReviewCodePanel {
     ]);
 
     const nonce = getNonce();
-
-    webview.postMessage({ codeBlock });
 
     // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
     return /*html*/ `
