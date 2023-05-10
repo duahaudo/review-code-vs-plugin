@@ -9,6 +9,7 @@
   "categories": [
     "Other"
   ],
+  "repository": "https://github.com/duahaudo/review-code-vs-plugin",
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
@@ -31,6 +32,7 @@
     ]
   },
   "scripts": {
+    "package": "vsce package",
     "install:all": "npm install && cd webview-ui && npm install",
     "start:webview": "cd webview-ui && npm run start",
     "build:webview": "cd webview-ui && npm run build",
