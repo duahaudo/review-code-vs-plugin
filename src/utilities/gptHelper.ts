@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-require('dotenv/config');
+import * as vscode from "vscode";
 const axios = require("axios");
 const readline = require('readline');
 const { Configuration, OpenAIApi } = require("openai");
@@ -14,16 +14,16 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+const openaiKey = vscode.workspace.getConfiguration("stiger-review").get<string>("openai-key");
 const http = axios.create({
   baseURL: "https://api.openai.com/v1/",
   headers: {
-    // Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-    Authorization: `Bearer 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`
+    Authorization: `Bearer ${openaiKey}`
   }
 });
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: openaiKey,
 });
 
 const openai = new OpenAIApi(configuration);
