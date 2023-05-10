@@ -61,7 +61,7 @@ export class ReviewCodePanel {
         // Panel title
         "Review Code",
         // The editor column the panel should be displayed in
-        ViewColumn.One,
+        ViewColumn.Beside,
         // Extra panel configurations
         {
           // Enable JavaScript in the webview

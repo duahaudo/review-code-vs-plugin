@@ -1,6 +1,4 @@
-import styled from "@emotion/styled";
-
-export const Block = styled.pre`
+.code-block {
   padding: 20px;
   border: 1px solid #aaa;
   border-radius: 4px;
@@ -16,4 +14,30 @@ export const Block = styled.pre`
   word-break: break-word;
   border-radius: 4px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-`
+  min-height: 100px;
+  flex: 1;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-container {
+  display: flex;
+  width: 100vw;
+  align-items: baseline;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0 20px;
+}
+
+.button {
+  flex: 1;
+  width: 100%;
+  margin: 5px 0;
+}

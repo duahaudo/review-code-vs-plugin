@@ -8,9 +8,45 @@ const WebViewContextProvider = ({ children }: any) => {
     if (window.location.href.includes("localhost")) {
       dispatch({
         type: ACTION.DISPLAY_CODE,
-        payload: "Test"
+        payload: `
+        webviewView.webview.options = {
+          // Allow scripts in the webview
+          enableScripts: true,
+    
+          localResourceRoots: [
+            this.context.extensionUri
+          ]
+        };
+        `
       })
     }
+  }, [])
+
+  useEffect(() => {
+
+    window.addEventListener('message', event => {
+      const message = event.data; // The JSON data our extension sent
+      // console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ useEffect ➡ message:`, message);
+      const { command, content } = message
+
+      switch (command) {
+        case "codeblock": {
+          dispatch({
+            type: ACTION.DISPLAY_CODE,
+            payload: content
+          })
+          break;
+        }
+        case 'optimize': {
+          dispatch({
+            type: ACTION.DISPLAY_OPTIMIZE,
+            payload: content
+          })
+          break;
+        }
+      }
+    });
+
   }, [])
 
   return (
