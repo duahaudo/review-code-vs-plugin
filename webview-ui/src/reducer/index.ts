@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { Dispatch, createContext } from "react";
 
 export type Action = { type: ACTION; payload: string };
 
@@ -22,12 +22,12 @@ export const initialState: State = {
 
 const reducer = (state: State, action: Action) => {
   console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ reducer ➡ state:`, state);
-  console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ reducer ➡ action:`, action);
+  console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ reducer ➡ ${action.type}:`, action);
 
   switch (action.type) {
     case ACTION.DISPLAY_CODE: {
       const newState = { ...initialState, code: action.payload }
-      console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ reducer ➡ newState:`, newState);
+      console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ reducer ➡ ACTION.DISPLAY_CODE:`, newState);
       return newState
     }
     case ACTION.DISPLAY_OPTIMIZE: {
@@ -43,4 +43,4 @@ const reducer = (state: State, action: Action) => {
 
 export default reducer;
 
-export const WebViewContext = createContext<any>({} as any);
+export const WebViewContext = createContext<{ state: State, dispatch: Dispatch<Action> }>({} as any);

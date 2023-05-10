@@ -1,10 +1,14 @@
+import { useContext } from "react"
+import { WebViewContext } from "../../reducer"
 import { Wrapper } from "./styled"
 
-const Optimize = ({ code }: any) => {
+const Optimize = () => {
+  const { state } = useContext(WebViewContext)
+
   return (
     <Wrapper>
       <pre>
-        {code}
+        {state.optimize}
       </pre>
     </Wrapper>
   )

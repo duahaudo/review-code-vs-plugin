@@ -1,13 +1,14 @@
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { Title } from "./App.styled";
 import CodePanel from "./components/codePanel";
-import reducer, { ACTION, WebViewContext, initialState } from "./reducer";
 import Optimize from "./components/optimize";
+import { ACTION, WebViewContext } from "./reducer";
+import WebViewContextProvider from "./reducer/provider";
 
 const App = () => {
 
-  const [, dispatch] = useReducer(reducer, initialState);
+  const { dispatch } = useContext(WebViewContext)
 
   // const handleHowdyClick = useCallback(() => {
   //   vscode.postMessage({
@@ -16,54 +17,43 @@ const App = () => {
   //   });
   // }, [])
 
-  const [code, setCode] = useState("")
-  const [optimize, setOptimize] = useState("")
-
   useEffect(() => {
-    // Handle the message inside the webview
-    if (!window.location.href.includes("localhost")) {
-      window.addEventListener('message', event => {
-        const message = event.data; // The JSON data our extension sent
-        // console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ useEffect ➡ message:`, message);
-        const { command, content } = message
 
-        switch (command) {
-          case "codeblock": {
-            setCode(content)
-            dispatch({
-              type: ACTION.DISPLAY_CODE,
-              payload: content
-            })
-            break;
-          }
-          case 'optimize': {
-            setOptimize(content)
-            dispatch({
-              type: ACTION.DISPLAY_OPTIMIZE,
-              payload: content
-            })
-            break;
-          }
+    window.addEventListener('message', event => {
+      const message = event.data; // The JSON data our extension sent
+      // console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ useEffect ➡ message:`, message);
+      const { command, content } = message
+
+      switch (command) {
+        case "codeblock": {
+          dispatch({
+            type: ACTION.DISPLAY_CODE,
+            payload: content
+          })
+          break;
         }
-      });
-    } else {
-      dispatch({
-        type: ACTION.DISPLAY_CODE,
-        payload: "Test"
-      })
-    }
-  }, [dispatch])
+        case 'optimize': {
+          dispatch({
+            type: ACTION.DISPLAY_OPTIMIZE,
+            payload: content
+          })
+          break;
+        }
+      }
+    });
+
+  }, [])
 
   return (
-    <WebViewContext.Provider value={{ ...initialState }}>
+    <WebViewContextProvider>
       <main>
         <Title>Code block</Title>
-        <CodePanel code={code} />
+        <CodePanel />
         <Title>Optimize</Title>
-        <Optimize code={optimize} />
+        <Optimize />
         {/* <VSCodeButton onClick={handleHowdyClick}>Howdy!</VSCodeButton> */}
       </main>
-    </WebViewContext.Provider>
+    </WebViewContextProvider>
   );
 }
 
