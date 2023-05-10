@@ -1,9 +1,9 @@
 import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
 import { useCallback, useContext } from "react"
-import { Title } from "../../App.styled"
 import { WebViewContext } from "../../reducer"
 import { vscode } from "../../utilities/vscode"
-import "./style.css"
+import "../../App.css"
+import CodeBlock from "../CodeBlock"
 
 const CodePanel = () => {
   const { state } = useContext(WebViewContext)
@@ -16,11 +16,11 @@ const CodePanel = () => {
 
   return (
     <div className="container">
-      <Title>Code block</Title>
+      <h3>Code block</h3>
       <div className="content-container">
-        <div className="code-block">
-          {state.code}
-        </div>
+
+        <CodeBlock code={state.code} />
+
         <div className="button-container">
           <VSCodeButton className="button" onClick={() => requestGpt("review")}>Review</VSCodeButton>
           <VSCodeButton className="button" onClick={() => requestGpt("refactor")}>Refactor</VSCodeButton>

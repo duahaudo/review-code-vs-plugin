@@ -19,6 +19,12 @@ const WebViewContextProvider = ({ children }: any) => {
         };
         `
       })
+
+      dispatch({
+        type: ACTION.DISPLAY_OPTIMIZE,
+        payload: "One possible way to optimize this code is to use object destructuring to avoid repetitive object references:\n\n```\nconst { extensionUri } = this.context;\nwebviewView.webview.options = {\n  enableScripts: true,\n  localResourceRoots: [extensionUri],\n};\n```\n\nThis reduces the number of times `this.context` is accessed, and also makes the code more concise and easier to read. It's a small optimization, but it can help improve code quality and maintainability."
+
+      })
     }
   }, [])
 
