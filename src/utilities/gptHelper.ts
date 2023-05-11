@@ -86,7 +86,7 @@ export const review = async (code: string) => {
 
     const response = await askChatGPT([createMessage(`Optimize the following typescript code: ${code}`)]);
     const { content } = getContentFromResponse(response);
-    console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ review ➡ response:`, content);
+    console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ review ➡ response:\n`, content);
     return content;
 
   } catch (error: any) {

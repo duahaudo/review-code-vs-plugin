@@ -22,7 +22,7 @@ const WebViewContextProvider = ({ children }: any) => {
 
       dispatch({
         type: ACTION.DISPLAY_OPTIMIZE,
-        payload: "One possible way to optimize this code is to use object destructuring to avoid repetitive object references:\n\n```\nconst { extensionUri } = this.context;\nwebviewView.webview.options = {\n  enableScripts: true,\n  localResourceRoots: [extensionUri],\n};\n```\n\nThis reduces the number of times `this.context` is accessed, and also makes the code more concise and easier to read. It's a small optimization, but it can help improve code quality and maintainability."
+        payload: 'Explanation:\nThis code defines a method called "clearSession", which performs the following tasks:\n1. Calls another method called "stopGenerating".\n2. Sets a property called "apiGpt3" to undefined.\n3. Sets a property called "messageId" to undefined.\n4. Sets a property called "conversationId" to undefined.\n5. Calls a method called "logEvent" with the argument "cleared-session".\n\nOptimized code:\npublic clearSession(): void {\n\t\tthis.stopGenerating();\n\t\tthis.apiGpt3 = this.messageId = this.conversationId = undefined;\n\t\tthis.logEvent("cleared-session");\n\t}\n\nExplanation:\nThis optimized code does the same thing as the original code, but it sets the properties "apiGpt3", "messageId", and "conversationId" to undefined in a single line of code, using the shorthand for multiple variable assignments. This results in more concise and easier-to-read code.'
 
       })
     }

@@ -16,7 +16,7 @@ const CodePanel = () => {
 
   return (
     <div className="container">
-      <h3>Code block</h3>
+      <h3>Original</h3>
       <div className="content-container">
 
         <CodeBlock code={state.code} />
