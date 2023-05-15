@@ -1,23 +1,27 @@
 import { Dispatch, createContext } from "react";
 
-export type Action = { type: ACTION; payload: string };
+export type Action = { type: ACTION; payload: unknown };
 
 export enum ACTION {
-  DISPLAY_CODE = 'DISPLAY_CODE',
-  DISPLAY_REVIEW = 'DISPLAY_REVIEW',
-  DISPLAY_OPTIMIZE = 'DISPLAY_OPTIMIZE'
+  DISPLAY_CODE = "DISPLAY_CODE",
+  DISPLAY_REVIEW = "DISPLAY_REVIEW",
+  DISPLAY_OPTIMIZE = "DISPLAY_OPTIMIZE",
+  SHOW_LOADING = "SHOW_LOADING",
+  DISPLAY_OPTIMIZE_STREAM = "DISPLAY_OPTIMIZE_STREAM",
 }
 
 export interface State {
-  code: string
-  optimize: string
-  review: string
+  code: string;
+  optimize: string;
+  review: string;
+  loading: boolean;
 }
 
 export const initialState: State = {
   code: "",
   optimize: "",
-  review: ""
+  review: "",
+  loading: false,
 };
 
 const reducer = (state: State, action: Action) => {
@@ -26,15 +30,24 @@ const reducer = (state: State, action: Action) => {
 
   switch (action.type) {
     case ACTION.DISPLAY_CODE: {
-      const newState = { ...initialState, code: action.payload }
-      console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ reducer ➡ ACTION.DISPLAY_CODE:`, newState);
-      return newState
+      const newState: State = { ...initialState, code: action.payload as string };
+      // console.log(
+      //   `🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ reducer ➡ ACTION.DISPLAY_CODE:`,
+      //   newState
+      // );
+      return newState;
     }
     case ACTION.DISPLAY_OPTIMIZE: {
-      return { ...state, optimize: action.payload }
+      return { ...state, optimize: action.payload as string };
+    }
+    case ACTION.DISPLAY_OPTIMIZE_STREAM: {
+      return { ...state, optimize: `${state.optimize}${action.payload as string}` };
     }
     case ACTION.DISPLAY_REVIEW: {
-      return { ...state, review: action.payload }
+      return { ...state, review: action.payload as string };
+    }
+    case ACTION.SHOW_LOADING: {
+      return { ...state, loading: action.payload as boolean };
     }
     default:
       return state;
@@ -43,4 +56,6 @@ const reducer = (state: State, action: Action) => {
 
 export default reducer;
 
-export const WebViewContext = createContext<{ state: State, dispatch: Dispatch<Action> }>({} as any);
+export const WebViewContext = createContext<{ state: State; dispatch: Dispatch<Action> }>(
+  {} as any
+);

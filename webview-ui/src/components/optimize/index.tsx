@@ -1,16 +1,22 @@
-import { useContext } from "react"
-import { WebViewContext } from "../../reducer"
-import Response from "../Response"
+import { useContext, useEffect, useState } from "react";
+import { WebViewContext } from "../../reducer";
+import { SlackMarkup } from "../Response";
 
 const Optimize = () => {
-  const { state } = useContext(WebViewContext)
+  const context = useContext(WebViewContext);
+  const { state } = context;
+  const [data, setData] = useState(state.optimize);
+
+  useEffect(() => {
+    setData(state.optimize);
+  }, [state.optimize]);
 
   return (
     <div className="container">
       <h3>Result</h3>
-      <Response response={state.optimize} />
+      <SlackMarkup text={data} />
     </div>
-  )
-}
+  );
+};
 
-export default Optimize
+export default Optimize;
