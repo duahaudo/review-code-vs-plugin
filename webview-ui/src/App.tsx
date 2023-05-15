@@ -37,7 +37,7 @@ const App = () => {
         <VSCodeLink
           style={{ position: "fixed", top: 0, left: 20 }}
           onClick={() => setShowOriginal(!showOriginal)}>
-          Show Code
+          {showOriginal ? `Hide code` : "Show code"}
         </VSCodeLink>
       )}
 

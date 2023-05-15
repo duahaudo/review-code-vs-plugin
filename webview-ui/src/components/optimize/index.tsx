@@ -13,7 +13,6 @@ const Optimize = () => {
 
   return (
     <div className="container">
-      <h3>Result</h3>
       <SlackMarkup text={data} />
     </div>
   );
