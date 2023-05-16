@@ -125,7 +125,7 @@ export const reviewInStream = async (
 ) => {
   try {
     const response = await askChatGPTStream([
-      createMessage(`${prepend} Optimize the following typescript code: ${code}`),
+      createMessage(`${prepend} Review and Optimize the following typescript code: ${code}`),
     ]);
 
     getStreamData(response)
@@ -137,7 +137,6 @@ export const reviewInStream = async (
 
         for (const line of lines) {
           if (line.includes("data: [DONE]")) {
-            console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ .then ➡ line:`, line);
             //OpenAI sends [DONE] to say it's over
             clear();
             return;

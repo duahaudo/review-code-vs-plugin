@@ -25,6 +25,7 @@ export const SlackMarkup: React.FC<any> = ({ text }) => {
               language="typescript"
               style={atomOneDark}
               key={index}
+              wrapLongLines
               showLineNumbers>
               {code}
             </SyntaxHighlighter>

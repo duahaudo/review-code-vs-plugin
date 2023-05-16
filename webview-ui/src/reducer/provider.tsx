@@ -1,23 +1,12 @@
 import { useEffect, useReducer } from "react";
 import reducer, { ACTION, WebViewContext, initialState } from ".";
+import { Uri } from "vscode";
 
 const WebViewContextProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (window.location.href.includes("localhost")) {
-      const codeSnippet = `const uiToServerOutboundField = (input: IOutboundField, isDelete?: boolean): ServerOutboundField => {
-  const state = getState(input);
-
-  const serverField: ServerOutboundField = {
-    ...input.__backup,
-    ...toServer(input, outboundFieldMappings),
-    active: input.Active ? 1 : 0,
-    state,
-  };
-
-  return serverField;
-}`;
       dispatch({
         type: ACTION.DISPLAY_CODE,
         payload: `
@@ -41,6 +30,11 @@ const WebViewContextProvider = ({ children }: any) => {
   }, []);
 
   useEffect(() => {
+    dispatch({
+      type: ACTION.RELOAD_DATA,
+      payload: null,
+    });
+
     window.addEventListener("message", (event) => {
       const message = event.data; // The JSON data our extension sent
       // console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ useEffect ➡ message:`, message);
@@ -50,7 +44,11 @@ const WebViewContextProvider = ({ children }: any) => {
         case "codeblock": {
           dispatch({
             type: ACTION.DISPLAY_CODE,
-            payload: content as string,
+            payload: content as {
+              selection: string;
+              fileName: string;
+              uri: Uri;
+            },
           });
           break;
         }

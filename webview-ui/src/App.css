@@ -50,3 +50,15 @@ main > * {
 .p-20 {
   margin: 20px;
 }
+
+.show-code {
+  position: fixed;
+  top: 0;
+  left: 20px;
+}
+
+.back-to-file {
+  position: fixed;
+  top: 0;
+  right: 20px;
+}

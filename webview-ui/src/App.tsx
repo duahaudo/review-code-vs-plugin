@@ -1,29 +1,11 @@
 import { VSCodeLink } from "@vscode/webview-ui-toolkit/react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import "./App.css";
 import CodePanel from "./components/CodePanel";
 import Optimize from "./components/Optimize";
+import Thinking from "./components/Thinking";
 import { WebViewContext } from "./reducer";
-
-const Thinking = () => {
-  const [think, setThink] = useState("");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setThink((prevThink) => {
-        if (prevThink.length < 5) {
-          return prevThink + "💭";
-        } else {
-          return "";
-        }
-      });
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return <div style={{ position: "fixed", top: 0 }}>{think}</div>;
-};
+import { vscode } from "./utilities/vscode";
 
 const App = () => {
   const { state } = useContext(WebViewContext);
@@ -34,12 +16,16 @@ const App = () => {
       {state.loading && <Thinking />}
 
       {!state.loading && (
-        <VSCodeLink
-          style={{ position: "fixed", top: 0, left: 20 }}
-          onClick={() => setShowOriginal(!showOriginal)}>
+        <VSCodeLink className="show-code" onClick={() => setShowOriginal(!showOriginal)}>
           {showOriginal ? `Hide code` : "Show code"}
         </VSCodeLink>
       )}
+
+      <VSCodeLink
+        className="back-to-file"
+        onClick={() => vscode.postMessage({ command: "open-file", uri: state.fileName })}>
+        Back to file
+      </VSCodeLink>
 
       {showOriginal && <CodePanel />}
       <Optimize />

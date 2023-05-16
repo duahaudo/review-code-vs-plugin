@@ -1,4 +1,4 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
+import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, commands } from "vscode";
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
 
@@ -61,13 +61,16 @@ export class ReviewCodePanel {
         // Panel title
         "Review Code",
         // The editor column the panel should be displayed in
-        ViewColumn.Beside,
+        ViewColumn.One,
         // Extra panel configurations
         {
           // Enable JavaScript in the webview
           enableScripts: true,
           // Restrict the webview to only load resources from the `out` and `webview-ui/build` directories
-          localResourceRoots: [Uri.joinPath(extensionUri, "out"), Uri.joinPath(extensionUri, "webview-ui/build")],
+          localResourceRoots: [
+            Uri.joinPath(extensionUri, "out"),
+            Uri.joinPath(extensionUri, "webview-ui/build"),
+          ],
         }
       );
 
@@ -165,6 +168,9 @@ export class ReviewCodePanel {
             return;
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)
+          case "open-file": {
+            commands.executeCommand("vscode.open", Uri.file(message.uri));
+          }
         }
       },
       undefined,

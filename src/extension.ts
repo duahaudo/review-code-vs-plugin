@@ -4,11 +4,15 @@ import * as vscode from "vscode";
 import { review, reviewInStream } from "./utilities/gptHelper";
 
 export function activate(context: ExtensionContext) {
-  // Create the show hello world command
   const showReviewCodePanelCommand = commands.registerCommand(
     "stiger-vs-gpt.showReviewCodePanel",
     () => {
       ReviewCodePanel.render(context.extensionUri);
+
+      ReviewCodePanel.postMessage({
+        command: "show-loading",
+        content: true,
+      });
 
       const editor = vscode.window.activeTextEditor;
 
@@ -17,23 +21,12 @@ export function activate(context: ExtensionContext) {
       }
 
       const selection = editor.document.getText(editor.selection);
+      const { fileName, uri } = editor.document;
 
       ReviewCodePanel.postMessage({
         command: "codeblock",
-        content: selection,
+        content: { selection, fileName, uri },
       });
-
-      ReviewCodePanel.postMessage({
-        command: "show-loading",
-        content: true,
-      });
-
-      // review(selection).then((result: string) => {
-      //   ReviewCodePanel.postMessage({
-      //     command: "optimize",
-      //     content: result
-      //   });
-      // });
 
       const postMessage = (content: string) => {
         ReviewCodePanel.postMessage({
