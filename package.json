@@ -16,9 +16,15 @@
     "menus": {
       "editor/context": [
         {
+          "command": "stiger-vs-gpt.explainCode",
+          "group": "stiger-vs-gpt@",
+          "title": "Stiger: Explain",
+          "when": "editorHasSelection"
+        },
+        {
           "command": "stiger-vs-gpt.optimizeCode",
           "group": "stiger-vs-gpt@",
-          "title": "Stiger: Optimize Code",
+          "title": "Stiger: Optimize",
           "when": "editorHasSelection"
         }
       ]
@@ -26,12 +32,12 @@
     "commands": [
       {
         "command": "stiger-vs-gpt.explainCode",
-        "title": "Stiger: Explain Code",
+        "title": "Stiger: Explain",
         "enablement": "editorHasSelection"
       },
       {
         "command": "stiger-vs-gpt.optimizeCode",
-        "title": "Stiger: Review Code",
+        "title": "Stiger: Optimize",
         "enablement": "editorHasSelection"
       }
     ]
