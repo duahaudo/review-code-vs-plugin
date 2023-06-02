@@ -16,7 +16,7 @@
     "menus": {
       "editor/context": [
         {
-          "command": "stiger-vs-gpt.showReviewCodePanel",
+          "command": "stiger-vs-gpt.reviewCode",
           "group": "stiger-vs-gpt@",
           "title": "Stiger: Review Code",
           "when": "editorHasSelection"
@@ -25,7 +25,12 @@
     },
     "commands": [
       {
-        "command": "stiger-vs-gpt.showReviewCodePanel",
+        "command": "stiger-vs-gpt.explainCode",
+        "title": "Stiger: Explain Code",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "stiger-vs-gpt.reviewCode",
         "title": "Stiger: Review Code",
         "enablement": "editorHasSelection"
       }

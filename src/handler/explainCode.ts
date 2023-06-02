@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import { ReviewCodePanel } from "../panels/ReviewCodePanel";
 import { reviewInStream } from "../utilities/gptHelper";
 
-const reviewCodeHandler = (context: ExtensionContext) => {
+const explainCodeHandler = (context: ExtensionContext) => {
   ReviewCodePanel.render(context.extensionUri);
 
   ReviewCodePanel.postMessage({
@@ -40,4 +40,4 @@ const reviewCodeHandler = (context: ExtensionContext) => {
   });
 };
 
-export default reviewCodeHandler;
+export default explainCodeHandler;

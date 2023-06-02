@@ -26,7 +26,9 @@ interface Message {
   role: string;
   content: string;
 }
-const createMessage = (msg: string) => ({ role: "user", content: msg });
+
+const prepend = "Answer should be embedded in Slack Markup. ";
+export const createMessage = (msg: string) => ({ role: "user", content: `${prepend} ${msg}` });
 
 const getContentFromResponse = (response: any) => {
   const { choices } = response as any;
@@ -75,7 +77,7 @@ const askChatGPT = async (message: Message[]) => {
   });
 };
 
-const askChatGPTStream = async (message: Message[]): Promise<Stream> => {
+export const askChatGPTStream = async (message: Message[]): Promise<Stream> => {
   return new Promise(async (resolve) => {
     try {
       const request = {
@@ -101,10 +103,11 @@ const askChatGPTStream = async (message: Message[]): Promise<Stream> => {
   });
 };
 
-export const getStreamData = (stream: Stream): Promise<any> => {
+export const getStreamData = (stream: Stream, chunkHandler: (x: string) => void): Promise<any> => {
   return new Promise((resolve, reject) => {
     let data: any[] = [];
     stream.on("data", (chunk) => {
+      chunkHandler(chunk.toString());
       data.push(chunk);
     });
     stream.on("end", () => {
@@ -114,61 +117,6 @@ export const getStreamData = (stream: Stream): Promise<any> => {
       reject(err);
     });
   });
-};
-
-const prepend = "Answer should be embedded in Slack Markup. ";
-
-export const reviewInStream = async (
-  code: string,
-  postMessageFn: (x: string) => void,
-  clear: () => void
-) => {
-  try {
-    const response = await askChatGPTStream([
-      createMessage(`${prepend} Review and Optimize the following typescript code: ${code}`),
-    ]);
-
-    getStreamData(response)
-      .then((text) => {
-        const lines: string[] = text
-          .toString()
-          .split("\n")
-          .filter((line: string) => line.trim() !== "");
-
-        for (const line of lines) {
-          if (line.includes("data: [DONE]")) {
-            //OpenAI sends [DONE] to say it's over
-            clear();
-            return;
-          }
-
-          const message = JSON.parse(line.substring(line.indexOf("{"), line.lastIndexOf("}") + 1));
-
-          try {
-            const { choices } = message;
-            const { content } = choices[0].delta;
-
-            if (content !== undefined) {
-              postMessageFn(content);
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      })
-      .catch((err) => console.error(err));
-
-    // const { content } = getContentFromResponse(response);
-    // console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ review ➡ response:\n`, content);
-    return "DONE";
-  } catch (error: any) {
-    if (error.response) {
-      console.log(error.response.status);
-      console.log(error.response.data);
-    } else {
-      console.log(error.message);
-    }
-  }
 };
 
 export const review = async (code: string) => {
