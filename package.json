@@ -16,9 +16,9 @@
     "menus": {
       "editor/context": [
         {
-          "command": "stiger-vs-gpt.reviewCode",
+          "command": "stiger-vs-gpt.optimizeCode",
           "group": "stiger-vs-gpt@",
-          "title": "Stiger: Review Code",
+          "title": "Stiger: Optimize Code",
           "when": "editorHasSelection"
         }
       ]
@@ -30,7 +30,7 @@
         "enablement": "editorHasSelection"
       },
       {
-        "command": "stiger-vs-gpt.reviewCode",
+        "command": "stiger-vs-gpt.optimizeCode",
         "title": "Stiger: Review Code",
         "enablement": "editorHasSelection"
       }

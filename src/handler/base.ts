@@ -1,9 +1,9 @@
-import { ExtensionContext } from "vscode";
 import * as vscode from "vscode";
+import { ExtensionContext } from "vscode";
 import { ReviewCodePanel } from "../panels/ReviewCodePanel";
-import { reviewInStream } from "../utilities/gptHelper";
+import { askChatGPTStreamHandler } from "../utilities/gptHelper";
 
-const reviewCodeHandler = (context: ExtensionContext) => {
+const askChatGptHandler = (context: ExtensionContext, prompt: string) => {
   ReviewCodePanel.render(context.extensionUri);
 
   ReviewCodePanel.postMessage({
@@ -32,7 +32,7 @@ const reviewCodeHandler = (context: ExtensionContext) => {
     });
   };
 
-  reviewInStream(selection, postMessage, () => {
+  askChatGPTStreamHandler(`${prompt} the following code: ${selection}`, postMessage, () => {
     ReviewCodePanel.postMessage({
       command: "show-loading",
       content: false,
@@ -40,4 +40,4 @@ const reviewCodeHandler = (context: ExtensionContext) => {
   });
 };
 
-export default reviewCodeHandler;
+export default askChatGptHandler;

@@ -119,6 +119,26 @@ export const getStreamData = (stream: Stream, chunkHandler: (x: string) => void)
   });
 };
 
+export const pushStreamResponse = (data: string, messageCallback: (message: string) => void) => {
+  const lines: string[] = data.split("\n").filter((line: string) => line.trim() !== "");
+  try {
+    for (const line of lines) {
+      if (!line.includes("data: [DONE]")) {
+        const message = JSON.parse(line.substring(line.indexOf("{"), line.lastIndexOf("}") + 1));
+        const { choices } = message;
+        const { content } = choices[0].delta;
+
+        if (content) {
+          messageCallback(content);
+        }
+      }
+    }
+  } catch (e) {
+    console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ getStreamData ➡ line:`, data);
+    console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ getStreamData ➡ e:`, e);
+  }
+};
+
 export const review = async (code: string) => {
   try {
     const response = await askChatGPT([
@@ -127,6 +147,27 @@ export const review = async (code: string) => {
     const { content } = getContentFromResponse(response);
     console.log(`🚀 SLOG (${new Date().toLocaleTimeString()}): ➡ review ➡ response:\n`, content);
     return content;
+  } catch (error: any) {
+    if (error.response) {
+      console.log(error.response.status);
+      console.log(error.response.data);
+    } else {
+      console.log(error.message);
+    }
+  }
+};
+
+export const askChatGPTStreamHandler = async (
+  code: string,
+  postMessageFn: (x: string) => void,
+  clear: () => void
+) => {
+  try {
+    const streamResponse = await askChatGPTStream([createMessage(code)]);
+
+    getStreamData(streamResponse, (data: string) => pushStreamResponse(data, postMessageFn))
+      .catch((err) => console.error(err))
+      .finally(() => clear());
   } catch (error: any) {
     if (error.response) {
       console.log(error.response.status);
