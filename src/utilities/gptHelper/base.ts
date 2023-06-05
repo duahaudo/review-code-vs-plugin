@@ -27,7 +27,7 @@ interface Message {
   content: string;
 }
 
-const prepend = "Answer should be embedded in Slack Markup. ";
+const prepend = "Answer must be embedded in Slack Markup. ";
 export const createMessage = (msg: string) => ({ role: "user", content: `${prepend} ${msg}` });
 
 const getContentFromResponse = (response: any) => {
