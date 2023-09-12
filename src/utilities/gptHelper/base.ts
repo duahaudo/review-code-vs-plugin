@@ -28,7 +28,10 @@ interface Message {
 }
 
 const prepend = "Answer must be embedded in Slack Markup. ";
-export const createMessage = (msg: string) => ({ role: "user", content: `${prepend} ${msg}` });
+export const createMessage = (msg: string, isSystem?: boolean) => ({
+  role: isSystem ? "system" : "user",
+  content: `${prepend} ${msg}`,
+});
 
 const getContentFromResponse = (response: any) => {
   const { choices } = response as any;
@@ -163,7 +166,10 @@ export const askChatGPTStreamHandler = async (
   clear: () => void
 ) => {
   try {
-    const streamResponse = await askChatGPTStream([createMessage(code)]);
+    const streamResponse = await askChatGPTStream([
+      createMessage("You are code reviewer and you will be provide peace of code", true),
+      createMessage(code),
+    ]);
 
     getStreamData(streamResponse, (data: string) => pushStreamResponse(data, postMessageFn))
       .catch((err) => console.error(err))
