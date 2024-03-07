@@ -3,7 +3,7 @@ import { useCallback, useContext } from "react";
 import { WebViewContext } from "../../reducer";
 import { vscode } from "../../utilities/vscode";
 import "../../App.css";
-import CodeBlock from "../CodeBlock";
+import { CodeBlock } from "../CodeBlock";
 
 const CodePanel = () => {
   const { state } = useContext(WebViewContext);

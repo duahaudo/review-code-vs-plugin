@@ -24,7 +24,7 @@
         {
           "command": "stiger-vs-gpt.optimizeCode",
           "group": "stiger-vs-gpt@",
-          "title": "Stiger: Optimize",
+          "title": "Stiger: Review",
           "when": "editorHasSelection"
         }
       ]
@@ -37,7 +37,7 @@
       },
       {
         "command": "stiger-vs-gpt.optimizeCode",
-        "title": "Stiger: Optimize",
+        "title": "Stiger: Review",
         "enablement": "editorHasSelection"
       }
     ]

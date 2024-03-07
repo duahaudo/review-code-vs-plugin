@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { WebViewContext } from "../../reducer";
-import { SlackMarkup } from "../Response";
+import MarkdownRenderer from "../CodeBlock";
 
 const Optimize = () => {
   const context = useContext(WebViewContext);
   const { state } = context;
-  const [data, setData] = useState(state.optimize);
+  const [data, setData] = useState<string>(state.optimize);
 
   useEffect(() => {
     setData(state.optimize);
@@ -13,7 +13,7 @@ const Optimize = () => {
 
   return (
     <div className="container">
-      <SlackMarkup text={data} />
+      <MarkdownRenderer code={data || ""} />
     </div>
   );
 };
